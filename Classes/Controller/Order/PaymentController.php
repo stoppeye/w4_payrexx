@@ -112,9 +112,11 @@ class PaymentController extends ActionController
 
             if ($this->cart) {
                 $orderItem = $this->cart->getOrderItem();
-
                 $finishEvent = new FinishEvent($this->cart->getCart(), $orderItem, $this->cartConf);
                 $this->eventDispatcher->dispatch($finishEvent);
+                $successEvent = new SuccessEvent($this->cart->getCart(), $orderItem, $this->cartConf);
+                $this->eventDispatcher->dispatch($successEvent);
+
                 $this->redirect('show', 'Cart\Order', 'Cart', ['orderItem' => $orderItem]);
             } else {
                 $this->addFlashMessage(
